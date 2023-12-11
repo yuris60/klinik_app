@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../model/pegawai.dart';
+import '../service/pegawai_service.dart';
 import 'pegawai_detail_page.dart';
 
 class PegawaiUpdateForm extends StatefulWidget {
@@ -20,15 +21,23 @@ class _PegawaiUpdateFormState extends State<PegawaiUpdateForm> {
   final _emailPegawaiCtrl = TextEditingController();
   final _passwordPegawaiCtrl = TextEditingController();
 
+  Future<Pegawai> getData() async {
+    Pegawai data = await PegawaiService().getById(widget.pegawai.id.toString());
+    setState(() {
+      _namaPegawaiCtrl.text = data.namaPegawai;
+      _nipPegawaiCtrl.text = data.nipPegawai;
+      _tgllhrPegawaiCtrl.text = data.tgllhrPegawai;
+      _telpPegawaiCtrl.text = data.telpPegawai;
+      _emailPegawaiCtrl.text = data.emailPegawai;
+      _passwordPegawaiCtrl.text = data.passwordPegawai;
+    });
+    return data;
+  }
+
   void initState(){
     super.initState();
     setState(() {
-      _namaPegawaiCtrl.text = widget.pegawai.namaPegawai;
-      _nipPegawaiCtrl.text = widget.pegawai.nipPegawai;
-      _tgllhrPegawaiCtrl.text = widget.pegawai.tgllhrPegawai;
-      _telpPegawaiCtrl.text = widget.pegawai.telpPegawai;
-      _emailPegawaiCtrl.text = widget.pegawai.emailPegawai;
-      _passwordPegawaiCtrl.text = widget.pegawai.passwordPegawai;
+      getData();
     });
   }
 
@@ -110,19 +119,22 @@ class _PegawaiUpdateFormState extends State<PegawaiUpdateForm> {
 
   _tombolUbah(){
     return ElevatedButton(
-        onPressed: (){
+        onPressed: () async {
           Pegawai pegawai = Pegawai(
               namaPegawai: _namaPegawaiCtrl.text,
-              nipPegawai: _nipPegawaiCtrl.text,
-              tgllhrPegawai: _tgllhrPegawaiCtrl.text,
-              telpPegawai: _telpPegawaiCtrl.text,
+              passwordPegawai: _passwordPegawaiCtrl.text,
               emailPegawai: _emailPegawaiCtrl.text,
-              passwordPegawai: _passwordPegawaiCtrl.text
+              telpPegawai: _telpPegawaiCtrl.text,
+              tgllhrPegawai: _tgllhrPegawaiCtrl.text,
+              nipPegawai: _nipPegawaiCtrl.text
           );
-          Navigator.pushReplacement(context,
-              MaterialPageRoute(builder:
-                  (context) => PegawaiDetailPage(pegawai: pegawai))
-          );
+          String id = widget.pegawai.id.toString();
+          await PegawaiService().ubah(pegawai, id).then((value) {
+            Navigator.pop(context);
+            Navigator.pushReplacement(context,
+                MaterialPageRoute(builder:
+                    (context) => PegawaiDetailPage(pegawai: value)));
+          });
         },
         child: Text("Ubah")
     );

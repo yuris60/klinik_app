@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import '../../model/pegawai.dart';
 import 'pegawai_detail_page.dart';
 
-class PoliItem extends StatelessWidget {
+class PegawaiItem extends StatelessWidget {
   final Pegawai pegawai;
 
-  const PoliItem({super.key, required this.pegawai});
+  const PegawaiItem({super.key, required this.pegawai});
 
   @override
   Widget build(BuildContext context) {

@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:klinik_app/service/login_service.dart';
+
+import 'beranda.dart';
 
 class Login extends StatefulWidget {
   const Login({Key? key}) : super(key: key);
@@ -65,7 +68,29 @@ class _LoginState extends State<Login> {
   Widget _tombolLogin(){
     return Container(
       width: MediaQuery.of(context).size.width,
-      child: ElevatedButton(child: Text("Login"), onPressed: (){}),
+      child: ElevatedButton(child: Text("Login"), onPressed: () async{
+        String username = _usernameCtrl.text;
+        String password = _passwordCtrl.text;
+        await LoginService().login(username, password).then((value){
+          if(value == true){
+            Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => Beranda()));
+          } else {
+            AlertDialog alertDialog = AlertDialog(
+              content: Text("Username atau Password tidak valid"),
+              actions: [
+                ElevatedButton(
+                  onPressed: (){
+                    Navigator.pop(context);
+                  },
+                  child: Text("Ok"),
+                  style: ElevatedButton.styleFrom(primary: Colors.green),
+                )
+              ],
+            );
+            showDialog(context: context, builder: (context) => alertDialog);
+          }
+        });
+      }),
     );
   }
 }

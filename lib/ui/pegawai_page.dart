@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:klinik_app/ui/pegawai_detail_page.dart';
+import 'package:klinik_app/ui/pegawai_item_page.dart';
 import 'package:klinik_app/ui/pegawai_form_page.dart';
 import 'package:klinik_app/widget/sidebar.dart';
 
 import '../model/pegawai.dart';
+import '../service/pegawai_service.dart';
 
 class PegawaiPage extends StatefulWidget {
   PegawaiPage({super.key});
@@ -13,6 +15,18 @@ class PegawaiPage extends StatefulWidget {
 }
 
 class _PegawaiPageState extends State<PegawaiPage> {
+  Stream<List<Pegawai>> getList() async* {
+    List<Pegawai> data = await PegawaiService().listData();
+    yield data;
+  }
+
+  Future refreshData() async {
+    await Future.delayed(Duration(seconds: 1));
+    setState(() {
+      getList();
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -41,55 +55,31 @@ class _PegawaiPageState extends State<PegawaiPage> {
           )
         ],
       ),
-      body: ListView(
-        children: [
-          GestureDetector(
-            onTap: (){
-              Pegawai namapegawai = new Pegawai(
-                nipPegawai: "202110268",
-                namaPegawai: "Yuris Alkhalifi",
-                tgllhrPegawai: "17-08-1945",
-                telpPegawai: "089663920454",
-                emailPegawai: "yuris.yak@bsi.ac.id",
-                passwordPegawai: "bs10k3"
+      body: RefreshIndicator(
+        onRefresh: refreshData,
+        child: StreamBuilder(
+          stream: getList(),
+          builder: (context, AsyncSnapshot snapshot){
+            if(snapshot.hasError){
+              return Text(snapshot.error.toString());
+            }
+            if (snapshot.connectionState != ConnectionState.done){
+              return Center(
+                child: CircularProgressIndicator(),
               );
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => PegawaiDetailPage(pegawai: namapegawai)
-                )
-              );
-            },
-            child: Card(
-              child: ListTile(
-                title: Text("Yuris Alkhalifi"),
-              ),
-            ),
-          ),
-          GestureDetector(
-            onTap: (){
-              Pegawai namapegawai = new Pegawai(
-                nipPegawai: "202110111",
-                namaPegawai: "Kartika Puspita",
-                tgllhrPegawai: "17-08-1945",
-                telpPegawai: "081234567812",
-                emailPegawai: "kartika@bsi.ac.id",
-                passwordPegawai: "bs10k3"
-              );
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => PegawaiDetailPage(pegawai: namapegawai)
-                )
-              );
-            },
-            child: Card(
-              child: ListTile(
-                title: Text("Kartika Puspita"),
-              ),
-            ),
-          ),
-        ],
+            }
+            if(!snapshot.hasData && snapshot.connectionState == ConnectionState.done){
+              return Text("Data Kosong");
+            }
+
+            return ListView.builder(
+                itemCount: snapshot.data.length,
+                itemBuilder: (context, index) {
+                  return PegawaiItem(pegawai: snapshot.data[index]);
+                }
+            );
+          },
+        ),
       ),
     );
   }

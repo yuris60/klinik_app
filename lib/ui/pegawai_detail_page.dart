@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:klinik_app/service/pegawai_service.dart';
 import 'package:klinik_app/ui/pegawai_form_update_page.dart';
 import '../model/pegawai.dart';
 import 'pegawai_page.dart';
@@ -12,6 +13,11 @@ class PegawaiDetailPage extends StatefulWidget {
 }
 
 class _PegawaiDetailPageState extends State<PegawaiDetailPage> {
+  Stream<Pegawai> getData() async* {
+    Pegawai data = await PegawaiService().getById(widget.pegawai.id.toString());
+    yield data;
+  }
+
   @override
   Widget build(BuildContext context) {
     double baseWidth = 360;
@@ -19,57 +25,77 @@ class _PegawaiDetailPageState extends State<PegawaiDetailPage> {
     double ffem = fem * 0.97; //untuk text
 
     return Scaffold(
-      appBar: AppBar(title: Text("Detail Poli"),),
-      body: Column(
-        children: [
-          SizedBox(height: 20*fem),
-          Text(
-            "NIP Pegawai : ${widget.pegawai.nipPegawai}",
-            style: TextStyle(fontSize: 20*ffem),
-          ),
-          Text(
-            "Nama Pegawai : ${widget.pegawai.namaPegawai}",
-            style: TextStyle(fontSize: 20*ffem),
-          ),
-          Text(
-            "Tgl Lahir Pegawai : ${widget.pegawai.tgllhrPegawai}",
-            style: TextStyle(fontSize: 20*ffem),
-          ),
-          Text(
-            "No Telp Pegawai : ${widget.pegawai.telpPegawai}",
-            style: TextStyle(fontSize: 20*ffem),
-          ),
-          Text(
-            "Email Pegawai : ${widget.pegawai.emailPegawai}",
-            style: TextStyle(fontSize: 20*ffem),
-          ),
-          Text(
-            "Password Pegawai : ${widget.pegawai.passwordPegawai}",
-            style: TextStyle(fontSize: 20*ffem),
-          ),
-          SizedBox(height: 20*fem),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      appBar: AppBar(title: Text("Detail Pegawai"),),
+      body: StreamBuilder(
+        stream: getData(),
+        builder: (context, AsyncSnapshot snapshot){
+          if(snapshot.hasError){
+            return Text(snapshot.error.toString());
+          }
+          if (snapshot.connectionState != ConnectionState.done){
+            return Center(
+              child: CircularProgressIndicator(),
+            );
+          }
+          if(!snapshot.hasData && snapshot.connectionState == ConnectionState.done){
+            return Text("Data Kosong");
+          }
+
+          return Column(
             children: [
-              _tombolubah(),
-              _tombolhapus()
+              SizedBox(height: 20*fem),
+              Text(
+                "Nama Pegawai : ${snapshot.data.namaPegawai}",
+                style: TextStyle(fontSize: 20*ffem),
+              ),
+              SizedBox(height: 10*fem),
+              Text(
+                "Tanggal Lahir : ${snapshot.data.tgllhrPegawai}",
+                style: TextStyle(fontSize: 20*ffem),
+              ),
+              SizedBox(height: 10*fem),
+              Text(
+                "Nomor Telepon : ${snapshot.data.telpPegawai}",
+                style: TextStyle(fontSize: 20*ffem),
+              ),
+              SizedBox(height: 10*fem),
+              Text(
+                "Email : ${snapshot.data.emailPegawai}",
+                style: TextStyle(fontSize: 20*ffem),
+              ),
+              SizedBox(height: 10*fem),
+              Text(
+                "Password : ${snapshot.data.passwordPegawai}",
+                style: TextStyle(fontSize: 20*ffem),
+              ),
+              SizedBox(height: 20*fem),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  _tombolubah(),
+                  _tombolhapus()
+                ],
+              )
             ],
-          )
-        ],
+          );
+        },
       ),
     );
   }
 
   _tombolubah(){
-    return ElevatedButton(
-      onPressed: (){
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (context) => PegawaiUpdateForm(pegawai: widget.pegawai))
-        );
-      },
-      style: ElevatedButton.styleFrom(backgroundColor: Colors.orange, foregroundColor: Colors.white),
-      child: Text("Ubah"),
+    return StreamBuilder(
+      stream: getData(),
+      builder: (context, AsyncSnapshot snapshot) => ElevatedButton(
+        onPressed: (){
+          Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => PegawaiUpdateForm(pegawai: snapshot.data))
+          );
+        },
+        style: ElevatedButton.styleFrom(backgroundColor: Colors.orange, foregroundColor: Colors.white),
+        child: Text("Ubah"),
+      ),
     );
   }
 
@@ -80,14 +106,19 @@ class _PegawaiDetailPageState extends State<PegawaiDetailPage> {
           content: Text("Yakin ingin menghapus data ini?"),
           actions: [
             // tombol ya
-            ElevatedButton(
-              onPressed: (){
-                Navigator.pop(context);
-                Navigator.pushReplacement(context,
-                    MaterialPageRoute(builder: (context) => PegawaiPage()));
-              },
-              child: Text("YA"),
-              style: ElevatedButton.styleFrom(backgroundColor: Colors.red, foregroundColor: Colors.white),
+            StreamBuilder(
+              stream: getData(),
+              builder: (context, AsyncSnapshot snapshot) => ElevatedButton(
+                onPressed: () async {
+                  await PegawaiService().hapus(snapshot.data).then((value) {
+                    Navigator.pop(context);
+                    Navigator.pushReplacement(context,
+                        MaterialPageRoute(builder: (context) => PegawaiPage()));
+                  });
+                },
+                child: Text("YA"),
+                style: ElevatedButton.styleFrom(backgroundColor: Colors.red, foregroundColor: Colors.white),
+              ),
             ),
 
             // tombol batal

@@ -1,25 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:klinik_app/ui/beranda.dart';
-import 'package:klinik_app/ui/poli_page.dart';
+import 'package:klinik_app/ui/login.dart';
+import '/helpers/user_info.dart';
 
-void main() {
-  runApp(const MyApp());
-}
-
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
-
-  // This widget is the root of your application.
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Klinik App',
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-        useMaterial3: true,
-      ),
-      home: Beranda(),
-    );
-  }
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  var token = await UserInfo().getToken();
+  print(token);
+  runApp(MaterialApp(
+    title: "Klinik App",
+    debugShowCheckedModeBanner: false,
+    home: token == null ? Login() : Beranda(),
+  ));
 }

@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:klinik_app/ui/poli_detail_page.dart';
 import 'package:klinik_app/ui/poli_form_page.dart';
+import 'package:klinik_app/ui/poli_item_page.dart';
 import 'package:klinik_app/widget/sidebar.dart';
-
 import '../model/poli.dart';
+import '../service/poli_service.dart';
+import '../widget/sidebar.dart';
 
 class PoliPage extends StatefulWidget {
   const PoliPage({super.key});
@@ -13,102 +15,58 @@ class PoliPage extends StatefulWidget {
 }
 
 class _PoliPageState extends State<PoliPage> {
+  Stream<List<Poli>> getList() async* {
+    List<Poli> data = await PoliService().listData();
+    yield data;
+  }
+
+  Future refreshData() async {
+    await Future.delayed(Duration(seconds: 1));
+    setState(() {
+      getList();
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       drawer: Sidebar(),
       appBar: AppBar(
-        title: Text("Data Poli", style: TextStyle(color: Colors.white),),
-        centerTitle: true,
-        backgroundColor: Colors.blue,
-        leading: Builder(
-            builder: (context) {
-              return IconButton(
-                icon: Icon(Icons.menu, color: Colors.white),
-                onPressed: () => Scaffold.of(context).openDrawer(),
-              );
-            }
-        ),
+        title: Text("Data Poli"),
         actions: [
           GestureDetector(
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Icon(Icons.add, color: Colors.white),
-            ),
-            onTap: () {
-              Navigator.push(
-                  context, MaterialPageRoute(builder: (context) => 	PoliForm()));
+            child: Icon(Icons.add),
+            onTap: (){
+              Navigator.push(context, MaterialPageRoute(builder: (context) => PoliForm()));
             },
           )
         ],
       ),
-      body: ListView(
-        children: [
-          GestureDetector(
-            onTap: (){
-              Poli polianak = new Poli(namaPoli: "Poli Anak");
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => PoliDetailPage(poli: polianak)
-                )
+      body: RefreshIndicator(
+        onRefresh: refreshData,
+        child: StreamBuilder(
+          stream: getList(),
+          builder: (context, AsyncSnapshot snapshot){
+            if(snapshot.hasError){
+              return Text(snapshot.error.toString());
+            }
+            if (snapshot.connectionState != ConnectionState.done){
+              return Center(
+                child: CircularProgressIndicator(),
               );
-            },
-            child: Card(
-              child: ListTile(
-                title: Text("Poli Anak"),
-              ),
-            ),
-          ),
-          GestureDetector(
-            onTap: (){
-              Poli polikandungan = new Poli(namaPoli: "Poli Kandungan");
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => PoliDetailPage(poli: polikandungan)
-                  )
-              );
-            },
-            child: Card(
-              child: ListTile(
-                title: Text("Poli Kandungan"),
-              ),
-            ),
-          ),
-          GestureDetector(
-            onTap: (){
-              Poli poligigi = new Poli(namaPoli: "Poli Gigi");
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => PoliDetailPage(poli: poligigi)
-                  )
-              );
-            },
-            child: Card(
-              child: ListTile(
-                title: Text("Poli Gigi"),
-              ),
-            ),
-          ),
-          GestureDetector(
-            onTap: (){
-              Poli politht = new Poli(namaPoli: "Poli THT");
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => PoliDetailPage(poli: politht)
-                  )
-              );
-            },
-            child: Card(
-              child: ListTile(
-                title: Text("Poli THT"),
-              ),
-            ),
-          ),
-        ],
+            }
+            if(!snapshot.hasData && snapshot.connectionState == ConnectionState.done){
+              return Text("Data Kosong");
+            }
+
+            return ListView.builder(
+              itemCount: snapshot.data.length,
+              itemBuilder: (context, index) {
+                return PoliItem(poli: snapshot.data[index]);
+              }
+            );
+          },
+        ),
       ),
     );
   }
