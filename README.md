@@ -41,10 +41,10 @@ Pengguna yang dapat memakai sistem ini adalah hanya Admin.
 ## Prerequisite
 Untuk menjalankan aplikasi ini disarankan untuk menyiapkan aplikasi berikut ini :
   - [x] Android Studio Giraffe <code>2022.03.1 Patch 1</code>
-  <li>Flutter <code>3.13.2</code></li>
-  <li>Dart <code>3.1.0</code></li>
-  <li>Java JDK <code>19.0.0</code></li>
-  <li>Git <code>2.35.1</code></li>
+  - [x] Flutter <code>3.13.2</code>
+  - [x] Dart <code>3.1.0</code>
+  - [x] Java JDK <code>19.0.0</code>
+  - [x] Git <code>2.35.1</code>
 
 ## Credit
 Project ini mengacu pada modul praktik dari mata kuliah Mobile Programming Universitas Bina Sarana Informatika (UBSI).
