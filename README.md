@@ -23,16 +23,16 @@ Pengguna yang dapat memakai sistem ini adalah hanya Admin.
   <tbody>
     <tr>
       <td width="33%">
-        <img src="assets/img/login_page.jpg"><br>
         <h5 style="text-align: center">Login Form</h5>
+        <img src="assets/img/login_page.jpg"><br>
       </td>
       <td width="33%">
-        <img src="assets/img/pegawai_page.jpg">
         <h5 style="text-align: center">Form Tambah Pegawai</h5>
+        <img src="assets/img/pegawai_page.jpg">
       </td>
       <td width="33%">
-        <img src="assets/img/detail_pegawai_page.jpg">
         <h5 style="text-align: center">Form Detail Pegawai</h5>
+        <img src="assets/img/detail_pegawai_page.jpg">
       </td>
     </tr>
   </tbody>
