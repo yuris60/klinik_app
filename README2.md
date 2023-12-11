@@ -1,5 +1,7 @@
 # klinik_app
-<img src="assets/img/logo_ubsi.png" width="200px"><br>
+<center>
+  <img src="assets/img/logo_ubsi.png" width="200px"><br>
+</center>
 
 Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque lobortis tortor dictum, semper quam ut, vestibulum nisi. Fusce posuere erat vitae sodales tincidunt. Duis rhoncus orci nec nisi fringilla, vitae aliquam tellus facilisis. Nulla rhoncus vel ligula in placerat. Praesent cursus massa id auctor lacinia. Praesent eu dui non libero aliquet lacinia. Morbi varius ante est, sit amet scelerisque magna tempor at. Ut porttitor condimentum urna ac fringilla. Nunc accumsan varius sapien nec venenatis. In convallis elementum sapien, nec commodo erat tempus quis. Aliquam cursus ex eu magna molestie pharetra. Duis semper ut orci sit amet viverra. Pellentesque malesuada urna in auctor lobortis.
 
