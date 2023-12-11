@@ -1,5 +1,7 @@
 # klinik_app
-<img src="assets/img/logo_ubsi.png" width="200px"><br>
+<center>
+  <img src="assets/img/logo_ubsi.png" width="200px"><br>
+</center>
 
 Klinik App adalah aplikasi klinik berbasis Mobile dengan menggunakan framework Flutter. Terdapat 3 menu utama yang terdapat pada aplikasi ini yakni Poli, Pegawai dan Pasien.
 
