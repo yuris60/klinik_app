@@ -1,14 +1,14 @@
-# klinik_app
+# 🩺 Klinik App
 <center>
   <img src="assets/img/logo_ubsi.png" width="200px"><br>
 </center>
 
 Klinik App adalah aplikasi klinik berbasis Mobile dengan menggunakan framework Flutter. Terdapat 3 menu utama yang terdapat pada aplikasi ini yakni Poli, Pegawai dan Pasien.
 
-## Pengguna Sistem
+## 💻 Pengguna Sistem
 Pengguna yang dapat memakai sistem ini adalah hanya Admin.
 
-## Skenario Kebutuhan Pengguna
+## 👨‍💻 Skenario Kebutuhan Pengguna
 ### Admin
 <ol>
   <li>Admin dapat melakukan login.</li>
@@ -18,7 +18,7 @@ Pengguna yang dapat memakai sistem ini adalah hanya Admin.
   <li>Admin dapat melakukan logout.</li>
 </ol>
 
-## Screenshot Aplikasi
+## 🖼️ Screenshot Aplikasi
 <table width="100%">
   <tbody>
     <tr>
@@ -38,7 +38,7 @@ Pengguna yang dapat memakai sistem ini adalah hanya Admin.
   </tbody>
 </table>
 
-## Prerequisite
+## 📝 Prerequisite
 Untuk menjalankan aplikasi ini disarankan untuk menyiapkan aplikasi berikut ini :
   - [x] Android Studio Giraffe <code>2022.03.1 Patch 1</code>
   - [x] Flutter <code>3.13.2</code>
@@ -46,6 +46,6 @@ Untuk menjalankan aplikasi ini disarankan untuk menyiapkan aplikasi berikut ini 
   - [x] Java JDK <code>19.0.0</code>
   - [x] Git <code>2.35.1</code>
 
-## Credit
-Project ini mengacu pada modul praktik dari mata kuliah Mobile Programming Universitas Bina Sarana Informatika (UBSI).
+## 📜 Credit & License
+Project ini mengacu pada modul praktik dari mata kuliah Mobile Programming Universitas Bina Sarana Informatika (UBSI). Project ini bersifat open-source untuk edukasi.
 <blockquote>Kuliah...? BSI AJA !!</blockquote>
